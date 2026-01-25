@@ -109,7 +109,8 @@ class SovereignSystem:
                     real_health = m['health'] * erosion_data['erosion_factor']
                     
                     metrics_str = (f"Health: {real_health:.3f} (E:{erosion_data['erosion_factor']:.2f}) | "
-                                   f"Dread: {erosion_data['dread']:.2f} | Reality: {erosion_data['reality_density']:.3f}")
+                                   f"Dread: {erosion_data['dread']:.2f} | Reality: {erosion_data['reality_density']:.3f} | "
+                                   f"GridCoh: {m.get('grid_coherence', 0.0):.3f}")
                     
                     self.laser.log("UHIF", m['psi'], 100 * real_health, metrics_str)
                     

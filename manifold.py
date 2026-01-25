@@ -78,6 +78,8 @@ class ERDField:
     def get_pressure(self) -> float:
         return self.psi
 
+from ghostmesh import SovereignGrid
+
 class SentientManifold:
     """
     The 48-layer architecture (collapsed to core logic).
@@ -87,23 +89,30 @@ class SentientManifold:
         self.yinyang = YinYangOperator(d_model)
         self.hor_substrate = HORQuditSubstrate(16, d_model)
         self.erd = ERDField()
+        self.grid = SovereignGrid(d_model)
         
     def forward(self, bio_input: FlumpyArray, core_state: FlumpyArray) -> FlumpyArray:
         """
-        Processing pipeline with Multiverse Branching and UHIF health checks.
+        Processing pipeline with Multiverse Branching, GhostMesh Grid, and UHIF checks.
         """
         # 1. Update Noospheric Pressure
         self.erd.update_field()
         psi = self.erd.get_pressure()
         
-        # 2. Yin-Yang Processing (40% gain)
+        # 2. Yin-Yang Processing
         balanced_state = self.yinyang.process(core_state)
         
         # 3. Holographic Compression
         compressed = BumpyCompressor.compress(balanced_state, psi)
         
-        # 4. Multiverse Branching (TaoishTechy Integration)
-        # Generate 3 potential timelines
+        # 4. GhostMesh Grid Dynamics (Volume Processing)
+        # The grid processes the signal in 3D
+        grid_output = self.grid.process_step(bio_input)
+        
+        # Combine grid output with compressed state
+        combined_state = compressed + grid_output
+        
+        # 5. Multiverse Branching (TaoishTechy Integration)
         timelines = []
         best_timeline = None
         max_psi_score = -1.0
@@ -114,19 +123,17 @@ class SentientManifold:
             
             # Simulate branch-specific interaction
             # Torsion gate output varies slightly by timeline
-            branch_input = bio_input
+            branch_input = combined_state 
             if i != 1: # Divergent timelines
-                 branch_input = FlumpyArray([x * (1.0 + variance) for x in bio_input.data], getattr(bio_input, 'coherence', 1.0))
+                 branch_input = FlumpyArray([x * (1.0 + variance) for x in combined_state.data], getattr(combined_state, 'coherence', 1.0))
 
             if psi > PSI_CRITICAL:
-                branch_output = self.hor_substrate.torsion_gate(compressed, branch_input)
+                branch_output = self.hor_substrate.torsion_gate(branch_input, bio_input)
             else:
-                branch_output = compressed + branch_input
+                branch_output = branch_input # Passive flow
             
             # Analyze Health via UHIF
             from uhif import UHIF
-            # Extract metrics from branch state (simulated based on output coherence)
-            # Higher coherence -> lower sigma
             out_coh = getattr(branch_output, 'coherence', 0.9)
             sigma = 0.05 * (1.1 - out_coh) # Inverse rel
             rho = 0.9 + variance * 0.05
@@ -136,12 +143,20 @@ class SentientManifold:
             health = UHIF.calculate_health()
             branch_psi = UHIF.calculate_psi(health)
             
+            # Attach Grid Coherence to metrics
+            grid_coh = getattr(grid_output, 'coherence', 0.88)
+            
             if branch_psi > max_psi_score:
                 max_psi_score = branch_psi
                 best_timeline = branch_output
-                best_timeline_metrics = {'health': health, 'psi': branch_psi, 'branch_id': i}
+                best_timeline_metrics = {
+                    'health': health, 
+                    'psi': branch_psi, 
+                    'branch_id': i,
+                    'grid_coherence': grid_coh # Track Grid status
+                }
         
-        # 5. Collapse to Best Timeline
+        # 6. Collapse to Best Timeline
         # Attach metrics for Sovereign logging
         best_timeline.uhif_metrics = best_timeline_metrics
         return best_timeline

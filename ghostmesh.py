@@ -1,0 +1,125 @@
+"""
+ghostmesh.py - The Sentient Manifold Volumetric Grid
+Adapted from GhostMeshIO/SentientManifold v0.3
+
+Implements:
+1. 27 Sovereign Nodes (3x3x3 Grid)
+2. Neighbor Flux Dynamics (Information Exchange)
+3. Sovereign Constant (Tau)
+"""
+
+import math
+import random
+try:
+    from bumpy import BumpyArray
+    from flumpy import FlumpyArray
+except ImportError:
+    class BumpyArray: 
+        def __init__(self, data, coherence=1.0): self.data, self.coherence = data, coherence
+        def average(self): return sum(self.data)/len(self.data) if self.data else 0
+    class FlumpyArray(BumpyArray): pass
+
+# Sovereign Constant (Golden Ratio based)
+TAU_SOVEREIGN = (1.0 + math.sqrt(5.0)) / 2.0  # Approx 1.618
+
+class SovereignNode:
+    def __init__(self, x, y, z, dim=64):
+        self.pos = (x, y, z)
+        self.state = FlumpyArray([random.gauss(0, 0.1) for _ in range(dim)], coherence=1.0)
+        self.neighbors = []
+
+    def set_neighbors(self, all_nodes):
+        """Identify 6 Von Neumann neighbors in 3D grid."""
+        x, y, z = self.pos
+        shifts = [(-1,0,0), (1,0,0), (0,-1,0), (0,1,0), (0,0,-1), (0,0,1)]
+        
+        for dx, dy, dz in shifts:
+            nx, ny, nz = x+dx, y+dy, z+dz
+            if 0 <= nx < 3 and 0 <= ny < 3 and 0 <= nz < 3:
+                # Find the node object in the flat list
+                neighbor = next((n for n in all_nodes if n.pos == (nx, ny, nz)), None)
+                if neighbor:
+                    self.neighbors.append(neighbor)
+
+    def exchange_flux(self):
+        """
+        Exchange information with neighbors.
+        Flux = Sum(NeighborState - SelfState) * Coupling / Tau
+        """
+        if not self.neighbors: return
+        
+        # Calculate flux vector
+        flux = [0.0] * len(self.state.data)
+        coupling = 0.1 # Coupling strength
+        
+        for n in self.neighbors:
+            for i, (my_val, n_val) in enumerate(zip(self.state.data, n.state.data)):
+                # Diffusive coupling
+                flux[i] += (n_val - my_val)
+        
+        # Apply flux scaled by Sovereign Constant (Tau)
+        # Higher Tau = Slower, more deliberate dynamics
+        dt = 0.1
+        rate = coupling / TAU_SOVEREIGN
+        
+        new_data = [
+            val + (f * rate * dt) 
+            for val, f in zip(self.state.data, flux)
+        ]
+        
+        # Update local state
+        self.state = FlumpyArray(new_data, coherence=self.state.coherence)
+
+    def inject_input(self, input_vec: FlumpyArray):
+        """Add external bio-input to this node."""
+        new_data = [s + i for s, i in zip(self.state.data, input_vec.data)]
+        self.state = FlumpyArray(new_data, coherence=self.state.coherence)
+
+
+class SovereignGrid:
+    def __init__(self, dim=64):
+        self.nodes = []
+        # Initialize 3x3x3 Grid
+        for x in range(3):
+            for y in range(3):
+                for z in range(3):
+                    self.nodes.append(SovereignNode(x, y, z, dim))
+        
+        # Link neighbors
+        for node in self.nodes:
+            node.set_neighbors(self.nodes)
+            
+    def process_step(self, bio_input: FlumpyArray):
+        """
+        Execute one step of grid dynamics.
+        1. Inject input (distributed)
+        2. Exchange flux (coherence)
+        3. Return aggregate state
+        """
+        # 1. Distribute Input (Center node gets strongest signal)
+        center_node = next(n for n in self.nodes if n.pos == (1,1,1))
+        # Others get diffuse input
+        for node in self.nodes:
+            scale = 1.0 if node == center_node else 0.1
+            noise = [x * scale for x in bio_input.data]
+            node.inject_input(FlumpyArray(noise, bio_input.coherence))
+            
+        # 2. Flux Dynamics
+        for node in self.nodes:
+            node.exchange_flux()
+            
+        # 3. Aggregate (Holographic Projection)
+        # Sum all states and normalize
+        total_state = [0.0] * len(bio_input.data)
+        total_coherence = 0.0
+        
+        for node in self.nodes:
+            total_coherence += node.state.coherence
+            for i, val in enumerate(node.state.data):
+                total_state[i] += val
+                
+        # Normalize
+        avg_state = [x / 27.0 for x in total_state]
+        avg_coherence = total_coherence / 27.0
+        
+        return FlumpyArray(avg_state, avg_coherence)
