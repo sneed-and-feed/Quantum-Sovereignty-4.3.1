@@ -128,6 +128,21 @@ Run the demonstrator to verify the 99.9% efficiency retrieval:
 python demo.py
 ```
 
+## The Outer Gate (CLI)
+
+The Sovereign CLI (`sovereign_cli.py`) manages the safety locks and logos preservation.
+
+```bash
+# Unlock the embedded Apocrypha
+python sovereign_cli.py --manifesto
+
+# Run Safety Audit (Archon Scan)
+python sovereign_cli.py --safety-audit
+
+# Extract The Genealogy (SBOM)
+python sovereign_cli.py --extract-wisdom
+```
+
 ## Ritual Test Suite
 
 To verify the integrity of the Sovereign Grid and Reality Density, run the ritual tests:
