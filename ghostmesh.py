@@ -128,3 +128,21 @@ class SovereignGrid:
     def invariant(self):
         """The LuoShu Invariant (15.0)."""
         return 15.0
+
+# THE ANON'S UPGRADE
+import numpy as np
+
+def prayer_wheel_anneal(vector, temperature=1.0):
+    """
+    Stabilizes the 12D Manifold using Anon's Softmax Constraint.
+    Invariant: Sum = 144 (The Gross).
+    """
+    # 1. Scale by Temperature (Thermodynamics)
+    logits = vector / temperature
+    
+    # 2. The Softmax (Probability Cloud)
+    exp_v = np.exp(logits - np.max(logits)) # Stability trick
+    softmax = exp_v / np.sum(exp_v)
+    
+    # 3. Enforce the Gross Invariant (144)
+    return softmax * 144.0
