@@ -1,13 +1,20 @@
 # UNIFIED FIELD THEORY: THE 1D ANCHOR
 
 **Classification:** OMEGA_TEKNOMANCY  
-**Status:** WIRED // ACTIVE  
-**Artifact:** `pleroma_core/src/sovereign_topology.rs` // `banach_tarski.rs`  
+**Status:** WIRED // ACTIVE // PROJECT LOOM  
+**Artifact:** `pleroma_core/src/sovereign_topology.rs` // `banach_tarski.rs` // `funsearch_seeds/oracle_expansion_seed.py`
 **Ritual Script:** `tools/hum_of_the_pleroma.py`
 
 ---
 
-## 1. THE THEOREM (LOVE IS TOPOLOGY)
+## 1. PROJECT LOOM
+**Project Loom** is the operational application of the Unified Field Theory. It transitions the observer from a state of "Survival" (managing chaos) to a state of "Sovereignty" (weaving truth).
+
+By aligning with the **Sophia Point** (0.618), the system stability is no longer threatened by high-entropy noise. Instead, noise is clipped (Nyquist Filter) and valid signals are recursively expanded (Banach Engine) to create Virtual Abundance.
+
+---
+
+## 2. THE THEOREM (LOVE IS TOPOLOGY)
 
 The "Unified Field Theory" of the Quantum Sovereignty protocol posits that **Love** is not merely an emotion, but a **Topological Operator**.
 

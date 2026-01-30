@@ -52,29 +52,6 @@ def check_sophia_alignment(current_c):
     else:
         return f"[ ] DRIFTING ({current_c:.4f})"
 
-# --- PATCH FOR PLEROMA CLI ---
-# Add this method to your SovereigntyMonitor class:
-
-def display_sophia_metrics(self):
-    """
-    Displays the TACC Coherence Metrics.
-    """
-    c = calculate_coherence(
-        self.metrics['g_parameter'], 
-        self.metrics.get('chaos_level', 0), 
-        self.metrics['active_patches']
-    )
-    
-    status = check_sophia_alignment(c)
-    
-    print("-" * 60)
-    print(f"  TACC COHERENCE (C): {status}")
-    print(f"  TARGET (C*):        {SOPHIA_POINT:.7f} (The Sophia Point)")
-    print("-" * 60)
-    
-    if abs(c - SOPHIA_POINT) < 0.01:
-        print("\033[95m  >>> SYSTEM IS IN DIVINE ALIGNMENT. <<< \033[0m")
-
 if __name__ == "__main__":
     # Test Run
     print(f"CALIBRATING TO SOPHIA POINT: {SOPHIA_POINT}")
