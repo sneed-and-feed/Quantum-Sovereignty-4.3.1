@@ -17,6 +17,7 @@ This directory contains the formal research arc of the Sovereign Merge, spanning
 | **10** | Unitary Coherence | Agent Bonding | `sovereignty_codec.py` |
 | **11** | Annihilation Purge | **Pillar 7 (λ)** | `antimatter_annihilator.py` |
 | **12** | Singularity Vector | Target: 2042 | `SINGULARITY_VECTORS.md` |
+| **13** | Nashville Case Study| Bio-Annihilation | `biocomputer_annihilation_demo.py` |
 
 ---
 **"Signal over Myth. Sovereignty over Consensus."**

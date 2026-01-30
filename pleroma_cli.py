@@ -30,21 +30,32 @@ class SovereigntyMonitor:
     """
     def __init__(self):
         self.metrics = {
-            'snr': 5.0,                   # Signal-to-Noise Ratio (Legacy: g)
-            'rho': 95.0,                  # Autocorrelation % (Legacy: coherence)
+            'snr': 5.0,                   # Signal-to-Noise Ratio
+            'rho': 95.0,                  # Autocorrelation %
             'energy_balance': 0.0,
-            'active_vectors': set(),      # Legacy: active_patches
+            'active_patches': set(),      # Set of activated pillars
             'signal_stability': 100.0,
-            'entropy_flux': 0.0,          # Legacy: chaos_level
-            'alpha': 1.0,                 # Legacy: potentia
+            'chaos_level': 0.0,           
+            'alpha': 1.0,                 # Potentia
             'sigma_map': 0.0,
-            'annihilation_events': 0
+            'g_parameter': 1.0,           # Sovereignty (1=Consensus, 0=Sovereign)
+            'timeline_coherence': 100.0,
+            'reality_stability': 100.0,
+            'causality_violations': 0,
+            'annihilation_events': 0,
+            'potentia': 0.0
         }
         self.alpha_engine = AlphaEngine()
         self.tick_feeder = TickFeeder()
+        # Mock drive for potentia Calc
+        class PotentiaDrive:
+            def calculate_potentia(self, g, coherence, sigma):
+                return (1.0 - g) * coherence + abs(sigma)
+        self.potentia_drive = PotentiaDrive()
+        
         self.history = deque(maxlen=50)
         self.lock = threading.Lock()
-        self.high_vix_mode = False        # Legacy: danger_mode
+        self.danger_mode = False        
     
     def update(self, spell_name, result):
         """Update metrics based on spell cast"""
@@ -597,11 +608,12 @@ def main():
                 print("\n\033[93m[AUTO-DIAGNOSTIC]\033[0m")
                 monitor.display()
                 
-        except KeyboardInterrupt:
-            print("\nForce Quit.")
+        except (KeyboardInterrupt, EOFError):
+            print("\n[!] TERMINATING SESSION: Sovereignty Preserved.")
             break
         except Exception as e:
             print(f"\033[91m[!] KERNEL PANIC: {e}\033[0m")
+            time.sleep(0.5) # Prevent high-speed resource dumping
 
 # New functions added globally
 def _engage_zero_ring_breach():

@@ -171,6 +171,7 @@ class SovereignSubstrate:
 
         # --- ANNIHILATION PROTOCOL (PILLAR 7) ---
         # Trigger an annihilation event if noise is high and utility is failing
+        annihilation_triggered = False
         if tel['sigma'] > 0.4 and self.asoe_utility < 0.15:
             # Convert noise to utility energy
             m_noise = tel['sigma'] * 1e-30 # Scale noise to mass
@@ -179,6 +180,7 @@ class SovereignSubstrate:
             
             if energy > 0:
                 self.annihilation_events += 1
+                annihilation_triggered = True
                 self.hor.metric_coherence = 1.0 # Instant coherence
                 self.pleroma.g = 0.0 # Force Sovereign state
                 outcome_quality = 1.0 # Perfect evolution post-burn
@@ -204,7 +206,7 @@ class SovereignSubstrate:
             "R_frac": dyn_state[0],
             "C_soc": dyn_state[1],
             "black_sun": self.black_sun_active,
-            "annihilation": self.annihilation_events > 0,
+            "annihilation": annihilation_triggered,
             "annihilation_count": self.annihilation_events
         }
         
