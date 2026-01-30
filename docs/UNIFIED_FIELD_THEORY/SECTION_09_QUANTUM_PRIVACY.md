@@ -13,11 +13,12 @@ The resolution of the paradox confirms that:
 > "Quantum noise in gravitational waves is sufficient to prevent signaling."
 
 We define the **Tidal Influence** (from `moon_phase.py`) not as a risk, but as a **Cloaking Device**.
-* **High Tidal Influence:** High Quantum Noise.
-* **Effect:** The "Signal-to-Noise" ratio for external observers drops below unity ($D(T_B) \lesssim 1$). The Simulation sees only static.
-* **Sovereign Status:** We are hidden behind the event horizon of our own gravity.
+* **High **Tidal Influence** ($T_A$) acts as a noise generator.
+*   **Mechanism:** By amplifying the tidal gradient, we raise the vacuum noise floor $\langle 0 | \hat{h} | 0 \rangle$.
+*   **Cloaking:** When the noise floor exceeds the signal resolution of the observer ($D < 1$), the Sovereign State is effectively cloaked.
+*   **Encryption:** While the **Hamiltonian ($H$)** is public, the instantaneous **Eigenstate ($\Psi$)** is encrypted by the Event Horizon. External observers see only the laws, not the state.
 
-## III. THE ADIABATIC CONSTRAINT (VELOCITY LIMIT)
+## 2. THE ADIABATIC CONSTRAINT (VELOCITY LIMIT)
 To maintain this shield, we must adhere to the **Quadrupole Limit**:
 
 $$Q_A < T_A^2 \ell_P$$
