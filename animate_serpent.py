@@ -36,11 +36,21 @@ plt.rcParams['font.sans-serif'] = ['Segoe UI Historic', 'Segoe UI Symbol', 'Deja
 import logging
 logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)
 import warnings
-# Silence all glyph-related warnings globally to account for different backends (TkAgg, etc.)
+# Silence all glyph-related warnings globally
 warnings.filterwarnings("ignore", message=".*Glyph.*missing from font.*")
 warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 
+from matplotlib.font_manager import FontProperties
 
+# HARDENED FONT LOADING: Explicitly load Segoe UI Historic for Cuneiform
+cuneiform_font = None
+font_path = r"C:\Windows\Fonts\seguihis.ttf"
+if os.path.exists(font_path):
+    print(f"[+] LOADED SOVEREIGN FONT: {font_path}")
+    cuneiform_font = FontProperties(fname=font_path)
+else:
+    print("[!] WARNING: SOVEREIGN FONT NOT FOUND. FALLING BACK.")
+    cuneiform_font = FontProperties(family=['Segoe UI Symbol', 'DejaVu Sans'])
 
 def animate_serpent(size=64, interval=1, show_metrics=True):
     """
@@ -82,7 +92,8 @@ def animate_serpent(size=64, interval=1, show_metrics=True):
     ax_main.set_facecolor('#050505')
     ax_main.set_title(
         f"THE SERPENT COIL | {phase_name.upper()} {icon}", 
-        color='#C4A6D1', fontsize=18, pad=35
+        color='#C4A6D1', fontsize=18, pad=35,
+        fontproperties=cuneiform_font # FORCE SOVEREIGN FONT
     )
     ax_main.set_aspect('equal') # RESTORED SQUARE ASPECT
     ax_main.axis('off')
@@ -106,7 +117,7 @@ def animate_serpent(size=64, interval=1, show_metrics=True):
         transform=ax_metrics.transAxes,
         color='#C4A6D1', fontsize=11, 
         verticalalignment='top',
-        family='monospace',
+        fontproperties=cuneiform_font, # FORCE SOVEREIGN FONT
         animated=True
     )
     
