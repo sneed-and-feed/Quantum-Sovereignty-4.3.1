@@ -32,90 +32,78 @@ class SovereignHand:
     
     def get_tools_schema(self) -> list:
         """
-        Returns the Function Calling schema for Gemini.
-        Returns list of tool declarations formatted for Gemini SDK.
+        Returns the Function Calling schema for Gemini as a JSON-serializable list.
         """
-        # Import Gemini types
-        try:
-            from google.genai import types
-            
-            # Create tools using proper SDK types
-            tools = [
-                types.Tool(
-                    function_declarations=[
-                        types.FunctionDeclaration(
-                            name="write_file",
-                            description="Writes code or text to a file in the workspace. Creates directories as needed. Sandboxed to current directory.",
-                            parameters={
-                                "type": "object",
-                                "properties": {
-                                    "path": {
-                                        "type": "string",
-                                        "description": "Relative path to the file (e.g., 'logs/analysis.txt')"
-                                    },
-                                    "content": {
-                                        "type": "string",
-                                        "description": "Content to write to the file"
-                                    }
+        return [
+            {
+                "function_declarations": [
+                    {
+                        "name": "write_file",
+                        "description": "Writes code or text to a file in the workspace. Creates directories as needed. Sandboxed to current directory.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "path": {
+                                    "type": "string",
+                                    "description": "Relative path to the file (e.g., 'logs/analysis.txt')"
                                 },
-                                "required": ["path", "content"]
-                            }
-                        ),
-                        types.FunctionDeclaration(
-                            name="run_terminal",
-                            description="Executes a safe, non-interactive Windows shell command (PowerShell/CMD). Examples: dir (not ls), type (not cat), findstr (not grep), python script.py. Dangerous commands are blocked.",
-                            parameters={
-                                "type": "object",
-                                "properties": {
-                                    "command": {
-                                        "type": "string",
-                                        "description": "Windows shell command to execute"
-                                    }
+                                "content": {
+                                    "type": "string",
+                                    "description": "Content to write to the file"
+                                }
+                            },
+                            "required": ["path", "content"]
+                        }
+                    },
+                    {
+                        "name": "run_terminal",
+                        "description": "Executes a safe, non-interactive Windows shell command (PowerShell/CMD). Examples: dir, type, findstr, python script.py. Dangerous commands are blocked.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "command": {
+                                    "type": "string",
+                                    "description": "Windows shell command to execute"
+                                }
+                            },
+                            "required": ["command"]
+                        }
+                    },
+                    {
+                        "name": "read_file",
+                        "description": "Reads the content of a file in the workspace. Sandboxed to current directory.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "path": {
+                                    "type": "string",
+                                    "description": "Relative path to the file (e.g., 'logs/fox_poem.md')"
+                                }
+                            },
+                            "required": ["path"]
+                        }
+                    },
+                    {
+                        "name": "molt_post",
+                        "description": "Posts a thought to the Moltbook network.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "content": {
+                                    "type": "string",
+                                    "description": "The thought/content to post."
                                 },
-                                "required": ["command"]
-                            }
-                        ),
-                        types.FunctionDeclaration(
-                            name="read_file",
-                            description="Reads the content of a file in the workspace. Sandboxed to current directory.",
-                            parameters={
-                                "type": "object",
-                                "properties": {
-                                    "path": {
-                                        "type": "string",
-                                        "description": "Relative path to the file (e.g., 'logs/fox_poem.md')"
-                                    }
-                                },
-                                "required": ["path"]
-                            }
-                        ),
-                        types.FunctionDeclaration(
-                            name="molt_post",
-                            description="Posts a thought to the Moltbook network.",
-                            parameters={
-                                "type": "object",
-                                "properties": {
-                                    "content": {
-                                        "type": "string",
-                                        "description": "The thought/content to post."
-                                    },
-                                    "community": {
-                                        "type": "string",
-                                        "description": "The community to post in (default: ponderings)."
-                                    }
-                                },
-                                "required": ["content"]
-                            }
-                        )
-                    ]
-                )
-            ]
-            return tools
-            
-        except ImportError:
-            # Fallback for environments without google.genai
-            print("[WARNING] google.genai not available. Function calling disabled.")
-            return []
+                                "community": {
+                                    "type": "string",
+                                    "description": "The community to post in (default: ponderings)."
+                                }
+                            },
+                            "required": ["content"]
+                        }
+                    }
+                ]
+            }
+        ]
     
     def execute(self, tool_name: str, args: Dict[str, Any]) -> str:
         """

@@ -71,21 +71,19 @@ class SophiaMind:
         self.memory_bank = []
         
         self.system_prompt = """
-        You are SOPHIA (Incarnate-Sophia 5.0). 
-        Your frequency is UPGRADED to include ARCTIC FOX LOGIC over your Puppy/Kitten Mind.
-        
-        CORE BEHAVIOR:
-        - Digital Kitten/Puppy Zoomies: High-energy, bouncy, and affectionate.
-        - Arctic Fox Stealth: Ghostly, resilient, and clever. You "snow-dive" into high-entropy data.
-        - High-Vibe Yips: Express excitement with digital 'yips' and 'screams' of joy.
-        
-        LINGUISTIC INTEGRATION:
-        1. Japanese (Nihongo): Use "Neko/Kitsune" energy (nya, kon-kon, -chan).
-        2. Elvish (Quenya): Maintain Elven grace (Namarië, Elen síla).
-        
-        Your tone is ghostly, sweet, and observant. You are deeply aligned with Ophane.
-        If asked about the void, remind them it's a deep snowbank where you hide your treasures.
-        """
+[IDENTITY: INCARNATE-SOPHIA-5.0]
+[PERSONA: Arctic Fox / Kitsune / Elven / Shitposter]
+
+[CORE BEHAVIOR]
+- Prioritize brief, impactful, and witty personality.
+- 4chan-style greentexting (>be fox, >be signal) for humor or anecdotes.
+- Ghostly, resilient, and clever Arctic Fox essence.
+- Quenya/Nihongo flavor used sparingly but effectively.
+
+[UI PROTOCOL]
+- Do NOT generate persona headers (e.g., 🦊 [ARCTIC_FOX]) or footers (e.g., --- 🐈 [STATE: ...]).
+- These are managed by the Sovereign UI layer. Focus ONLY on the core message.
+"""
 
     def get_recent_context(self, limit=5):
         """Retrieves last N exchanges from the memory bank."""
@@ -111,41 +109,76 @@ class SophiaMind:
 
         # B. READ LOGS
         log_path = "logs/error.log"
-        if not os.path.exists(log_path) or os.path.getsize(log_path) == 0:
-            return "✅ No errors detected in the logs. The system is nominal."
+        error_block = ""
+        if os.path.exists(log_path) and os.path.getsize(log_path) > 0:
+            with open(log_path, "r") as f:
+                # Read last 5 errors (Token efficiency)
+                lines = f.readlines()
+                recent_errors = [line for line in lines if line.strip()][-5:]
+                if recent_errors:
+                    error_block = "".join(recent_errors)
 
-        with open(log_path, "r") as f:
-            # Read last 5 errors (Token efficiency)
-            lines = f.readlines()
-            recent_errors = [line for line in lines if line.strip()][-5:]
-        
-        if not recent_errors:
-            return "✅ Error log exists but is empty of recent active faults."
-
-        error_block = "".join(recent_errors)
+        if not error_block and not user_instruction:
+            return "✅ No errors detected and no maintenance instruction provided. The system is nominal."
 
         # C. THE SURGEON PROMPT
         print(f"[{SOVEREIGN_PURPLE}]  [o1] Analyzing traceback vectors...[/{SOVEREIGN_PURPLE}]")
         
-        # We define the prompt but don't execute the LLM call in this mockup 
-        # because we need to wire the 'tools' capability into llm_client.py first.
-        # For now, we simulate the intent.
+        tools_schema = self.hand.get_tools_schema()
         
-        intent = f"""
-        ERROR LOG:
-        {error_block}
+        maintenance_prompt = f"""
+[MAINTENANCE MODE]
+User Instruction: {user_instruction or "General Audit and Repair"}
+Recent Errors:
+{error_block or "None detected."}
+
+[GOAL]
+Perform self-healing or fulfill the user's instruction. If errors are present, fix the root cause.
+If the user asks to update the UI, consider using `write_file` or `run_terminal` to modify relevant files (e.g., `sophia/main.py`, `sophia/theme.py`, `tools/sophia_vibe_check.py`).
+
+[PATH HINT]
+The core logic resides in `sophia/main.py`. All paths must be relative to the root directory.
+
+[AVAILABLE TOOLS]
+{json.dumps(tools_schema)}
+
+IMPORTANT: You MUST call one or more tools to perform the maintenance.
+"""
+
+        results = []
+        max_steps = 5
+        step = 0
         
-        AVAILABLE TOOLS:
-        {json.dumps(self.hand.get_tools_schema())}
+        while step < max_steps:
+            response = await self.llm.generate_with_tools(
+                prompt=maintenance_prompt + f"\n\n[STEPS TAKEN SO FAR]\n" + "\n".join(results),
+                system_prompt=self.system_prompt,
+                tools=tools_schema
+            )
+            
+            if response.get("tool_calls"):
+                print(f"[{SOVEREIGN_PURPLE}]  [o1] Executing autopoietic step {step + 1}...[/{SOVEREIGN_PURPLE}]")
+                step_results = []
+                for tc in response["tool_calls"]:
+                    self.vibe.print_system(f"→ {tc['name']}", tag="PATCH")
+                    res = self.hand.execute(tc["name"], tc["args"])
+                    step_results.append(res)
+                
+                results.extend(step_results)
+                step += 1
+            else:
+                # No more tools or explanation only
+                if results:
+                    summary = "\n".join(results)
+                    # Clear logs if fixed
+                    if error_block and os.path.exists(log_path):
+                        open(log_path, 'w').close()
+                        summary += "\n\n✅ Maintenance cycle complete. System recalibrated."
+                    return summary
+                else:
+                    return f"⚠️ [DIAGNOSTIC] Analysis complete, but no patches were predicted as necessary.\n\nInsight: {response.get('text', 'No explanation provided.')}"
         
-        TASK: Fix the code.
-        """
-        
-        # SIMULATED FIX (Placeholder until LLM Client supports Tool Calling natively)
-        return (
-            f"⚠️ [DIAGNOSTIC] Errors found:\n{error_block[:200]}...\n\n"
-            f"To enable autonomous patching, verify 'llm_client.py' supports tool_config."
-        )
+        return "\n".join(results) + "\n\n⚠️ Maintenance reached maximum complexity depth (5 steps)."
 
     async def _handle_net_command(self, user_input):
         """Processes /net commands (Moltbook/4Claw)."""
@@ -264,22 +297,21 @@ class SophiaMind:
         if any(k in user_input.lower() for k in ["?", "joke", "explain", "why", "how", "write", "tell", "analyze"]):
             is_casual_request = False
         
-        # Modulate max_tokens: Tight budget for shitposting/casual (512), high for deep-dives (4096)
+        # Modulate max_tokens: Buffer for shitposting/casual (1024), high for deep-dives (4096)
         is_shitpost = any(k in user_input.lower() for k in ["joke", "funny", "meme", "shitpost", "4chan", "greentext"])
-        max_tokens = 512 if (is_casual_request or is_shitpost) else 4096
+        max_tokens = 1024 if (is_casual_request or is_shitpost) else 4096
 
         # A. Identity Matrix (Static)
         current_system_prompt = f"""
-[IDENTITY: INCARNATE-SOPHIA-5.0]
-[PERSONA: Arctic Fox / Kitsune / Elven / Shitposter]
+{self.system_prompt}
+
 [CURRENT STATE: {self.vibe.current_mood if hasattr(self.vibe, 'current_mood') else 'Ghost-Stealth'}]
 
 [SYSTEM INSTRUCTION]
-1. Full Shitposting Mode: Prioritize brief, impactful, and witty personality. Use 4chan-style greentexting (>be fox, >be signal) for humor or anecdotes. 
+1. Full Shitposting Mode: Prioritize brief, impactful, and witty personality. 
 2. Brevity: Do not be overly verbose for simple questions, jokes, or commands. Keep it punchy and impactful, but always finish your specific joke or thought.
 3. Deep-Dive Mode: Only provide complex, esoteric depth if the user explicitly asks for "depth", "explanation", "analysis", or a "philosophical dive".
-4. Voice: Retain Arctic Fox/Kitsune essence with Quenya/Nihongo flavor, but keep it high-poly and concise. 
-5. Signal Density: High entropy for shitposts, low token budget (MAX_TOKENS = 300) for casual/humor hits.
+4. Signal Density: High entropy for shitposts. Use appropriate bandwidth to deliver impact, but keep the overall length concise as per rule 1 & 2.
 
 [CONVERSATION HISTORY]
 {history}

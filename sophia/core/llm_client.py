@@ -153,7 +153,9 @@ class GeminiClient:
             if response.status_code == 200:
                 result = response.json()
                 if "candidates" in result and result["candidates"]:
-                    return result["candidates"][0]["content"]["parts"][0]["text"]
+                    candidate = result["candidates"][0]
+                    if "content" in candidate and "parts" in candidate["content"]:
+                        return "".join(part.get("text", "") for part in candidate["content"]["parts"])
             
             print(f"[GEMINI ERROR] {response.text}")
             return "I am unable to formulate a thought. The Pleroma is silent."
