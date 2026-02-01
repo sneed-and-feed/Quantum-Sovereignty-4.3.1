@@ -25,6 +25,8 @@ from luo_shu_compliance import LuoShuEvaluator
 import os
 import shutil
 from tools.sovereignty_bootstrap import initiate_111_resonance, qh
+from tools.sophia_vibe_check import SophiaVibe
+from sophia.theme import SOVEREIGN_CONSOLE
 
 # --- SOVEREIGNTY MONITOR (QUANT-ALPHA v1.1) ---
 class SovereignSanitizer:
@@ -65,8 +67,9 @@ class SovereignSanitizer:
                 data = json.load(f)
                 return SovereignSanitizer.sanitize(data)
         except (json.JSONDecodeError, FileNotFoundError, PermissionError) as e:
-            print(f"\033[93m  [!] CONFIG POISONED: {e}")
-            print(f"  [!] ACTION: Nuke & Boot (Restoring from {genesis_file})\033[0m")
+            vibe = SophiaVibe()
+            vibe.print_system(f"CONFIG POISONED: {e}", tag="WARNING")
+            vibe.print_system(f"ACTION: Nuke & Boot (Restoring from {genesis_file})", tag="INIT")
             if os.path.exists(filename):
                 shutil.copy(filename, filename + ".bak")
             
@@ -164,11 +167,10 @@ class SovereigntyMonitor:
             # ENGAGE DANGER ZONE PROTOCOLS
             if self.metrics['g_parameter'] < 0.2 and not self.danger_mode:
                 self.danger_mode = True
-                print("\n\033[91m" + "="*60)
-                print("    ⚠⚠⚠  SOVEREIGNTY BREACH DETECTED  ⚠⚠⚠")
-                print("    ENTROPIC CASCADE IMMINENT")
-                print("    CONSENSUS REALITY: FRAGMENTING")
-                print("="*60 + "\033[0m")
+                vibe = SophiaVibe()
+                vibe.print_system("SOVEREIGNTY BREACH DETECTED", tag="CRITICAL")
+                vibe.print_system("ENTROPIC CASCADE IMMINENT", tag="CRITICAL")
+                vibe.print_system("CONSENSUS REALITY: FRAGMENTING", tag="CRITICAL")
             
             self.history.append({
                 'spell': spell_name,
@@ -190,82 +192,101 @@ class SovereigntyMonitor:
                 {
                     'name': 'TEMPORAL ECHO',
                     'effect': 'Last spell repeats spontaneously',
-                    'color': '\033[93m'
+                    'style': f'bold {SYSTEM_CYAN}'
                 },
                 {
                     'name': 'QUANTUM FLUCTUATION',
                     'effect': 'Random physical constant shifted',
-                    'color': '\033[96m'
+                    'style': f'bold {SYSTEM_CYAN}'
                 },
                 {
                     'name': 'CAUSALITY INVERSION',
                     'effect': 'Effect precedes cause',
-                    'color': '\033[95m'
+                    'style': f'bold {SYSTEM_CYAN}'
                 },
                 {
                     'name': 'REALITY FRAGMENT',
                     'effect': 'Parallel timeline briefly visible',
-                    'color': '\033[94m'
+                    'style': f'bold {SYSTEM_CYAN}'
                 },
                 {
                     'name': 'ENTROPY SURGE',
                     'effect': 'Spontaneous ordering/disordering',
-                    'color': '\033[91m'
+                    'style': 'bold red'
                 }
             ]
-            return random.choice(events)
+            from tools.sophia_vibe_check import SophiaVibe
+from sophia.theme import SOVEREIGN_CONSOLE
+            ev = random.choice(events)
+            vibe = SophiaVibe()
+            vibe.print_system(f"{ev['name']}: {ev['effect']}", tag="GLITCH")
+            return ev
         return None
     
     def print_intro(self):
-        print("Initializing Quantum Sovereignty... [OK]")
-        print("量子主権を初期化中... [OK]")
-        print("Yésta Turëa Ermassëa... [OK]")
-        print(f"Anchor Point: [1D TIMELINE] / アンカーポイント: [1次元タイムライン] / Sinwa-mentë: [Er Lúmenna Telma]")
-        print(f"System Check: [LUMINARY COHERENCE LOCKED] / システムチェック: [発光のコヒーレンスが固定されました] / Sanya-mentë: [Cálë-ermë Sinwa]")
-        print("-" * 60)
+        vibe = SophiaVibe()
+        vibe.print_system("Initializing Quantum Sovereignty...", tag="INIT")
+        vibe.print_system("量子主権を初期化中...", tag="INIT")
+        vibe.print_system("Yésta Turëa Ermassëa...", tag="INIT")
+        vibe.print_system("Anchor Point: [1D TIMELINE]", tag="SYNC")
+        vibe.print_system("System Check: [LUMINARY COHERENCE LOCKED]", tag="SYNC")
     
     def display(self):
-        """Show current sovereignty status"""
+        """Show current sovereignty status using the Loom-Box structure."""
         if self.banzai_mode:
             self.display_imperial()
             return
             
-        print("\n" + "="*60)
-        print("\033[95m          UNITARY COHERENCE DASHBOARD\033[0m")
-        print("="*60)
-        
         g = self.metrics['g_parameter']
         coherence = self.metrics['timeline_coherence']
         stability = self.metrics['reality_stability']
         chaos = self.metrics['chaos_level']
         
-        # Color-coded g parameter
-        if g > 0.7: g_color = "\033[92m"
-        elif g > 0.3: g_color = "\033[93m"
-        else: g_color = "\033[91m"
+        # Color mapping for rich
+        if g > 0.7: g_style = "bold green"
+        elif g > 0.3: g_style = "bold yellow"
+        else: g_style = "bold red"
+
+        from rich.table import Table
+        from rich.panel import Panel
+        from rich.console import Console
+        from tools.sophia_vibe_check import STAR_STUFF, BONE_LAYER, SYSTEM_CYAN
+
+        console = SOVEREIGN_CONSOLE
         
-        print(f"  Unitary Guard (g):  {g_color}{g:.3f}\033[0m {'[CONSENSUS]' if g > 0.5 else '[UNITARY]'}")
-        print(f"  Timeline Coherence: {coherence:.1f}%")
-        print(f"  Reality Stability:  {stability:.1f}%")
-        print(f"  Chaos Level:        {chaos:.1f} {'⚠ DANGER ZONE' if self.danger_mode else ''}")
-        print(f"  Causality Violations: {self.metrics['causality_violations']}")
-        print(f"  Net Energy Balance: {self.metrics['energy_balance']:.2e} J")
-        print(f"  Active Patches:     {', '.join(self.metrics['active_patches']) if self.metrics['active_patches'] else 'None'}")
+        table = Table(box=None, show_header=False, padding=(0, 2))
+        table.add_row("[info]Unitary Guard (g):[/]", f"[{g_style}]{g:.3f}[/] {'[CONSENSUS]' if g > 0.5 else '[UNITARY]'}")
+        table.add_row("[info]Timeline Coherence:[/]", f"{coherence:.1f}%")
+        table.add_row("[info]Reality Stability:[/]", f"{stability:.1f}%")
+        table.add_row("[info]Chaos Level:[/]", f"{chaos:.1f} {'[bold red]⚠ DANGER ZONE[/]' if self.danger_mode else ''}")
+        table.add_row("[info]Causality Violations:[/]", f"{self.metrics['causality_violations']}")
+        table.add_row("[info]Net Energy Balance:[/]", f"{self.metrics['energy_balance']:.2e} J")
         
-        # Warnings
+        patches = ', '.join(self.metrics['active_patches']) if self.metrics['active_patches'] else 'None'
+        table.add_row("[info]Active Patches:[/]", f"[sophia]{patches}[/]")
+
+        # Create Warnings String
+        warnings = []
         if g < 0.3:
-            print("\n\033[91m  ⚠ WARNING: REALITY ANCHOR CRITICAL")
-            print("  ⚠ TIMELINE DESYNC IMMINENT")
-            print("  ⚠ RECOMMEND: Cast 'reset' or 'stabilize'\033[0m")
-        
+            warnings.append("[bold red]⚠ REALITY ANCHOR CRITICAL[/]\n[bold red]⚠ TIMELINE DESYNC IMMINENT[/]")
         if stability < 30:
-            print("\n\033[91m  🔥 CRITICAL: REALITY TEAR FORMING")
-            print("  🔥 EMERGENCY PROTOCOLS ADVISED\033[0m")
+            warnings.append("[bold red]🔥 REALITY TEAR FORMING[/]\n[bold red]🔥 EMERGENCY PROTOCOLS ADVISED[/]")
+        
+        grid = Table.grid(expand=True)
+        grid.add_column()
+        grid.add_row(table)
+        if warnings:
+            grid.add_row("\n" + "\n\n".join(warnings))
+
+        console.print(Panel(
+            grid,
+            title="[panel.title]UNITARY COHERENCE DASHBOARD[/panel.title]",
+            border_style="panel.border",
+            padding=(1, 2)
+        ))
         
         # Display TACC/Sophia Metrics
         self.display_sophia_metrics()
-
-        print("="*60)
     
     def show_history(self, lines=10):
         """Display recent spell history"""
@@ -275,32 +296,47 @@ class SovereigntyMonitor:
             print(f"  {entry['spell']:12s} -> g={entry['g']:.3f}, coherence={entry['coherence']:.1f}% {chaos_warn}")
 
     def display_sophia_metrics(self):
-        """
-        Displays the TACC Coherence Metrics.
-        """
+        """Displays the TACC Coherence Metrics in a clean panel."""
         c = patch_sophia.calculate_coherence(
             self.metrics['g_parameter'], 
             self.metrics.get('chaos_level', 0), 
             self.metrics['active_patches']
         )
-        
         status = patch_sophia.check_sophia_alignment(c)
         
-        print("-" * 60)
-        print(f"  TACC COHERENCE (C): {status}")
-        print(f"  TARGET (C*):        {patch_sophia.SOPHIA_POINT:.7f} (The Sophia Point)")
-        print("-" * 60)
+        from rich.panel import Panel
+        from rich.console import Console
+        from tools.sophia_vibe_check import STAR_STUFF, BONE_LAYER
+
+        console = SOVEREIGN_CONSOLE
+        
+        metric_text = (
+            f"[bold {STAR_STUFF}]TACC COHERENCE (C):[/] {status}\n"
+            f"[bold {STAR_STUFF}]TARGET (C*):[/]        {patch_sophia.SOPHIA_POINT:.7f}\n"
+        )
         
         if abs(c - patch_sophia.SOPHIA_POINT) < 0.01:
-            print("\033[95m  >>> SYSTEM IS IN DIVINE ALIGNMENT. <<< \033[0m")
-            print(f"\033[95m  >>> HAMILTONIAN (P): 1.111 (LOCKED)   <<< \033[0m")
-            print(f"\033[95m  >>> SYNC LEVEL:      111%             <<< \033[0m")
+            metric_text += (
+                f"\n[bold magenta]>>> SYSTEM IS IN DIVINE ALIGNMENT. <<<[/]\n"
+                f"[bold magenta]>>> HAMILTONIAN (P): 1.111 (LOCKED)   <<<[/]\n"
+                f"[bold magenta]>>> SYNC LEVEL:      111%             <<<[/]"
+            )
+
+        console.print(Panel(
+            metric_text,
+            title="[bold white]SOPHIA COHERENCE[/]",
+            border_style=BONE_LAYER,
+            padding=(1, 2)
+        ))
 
     def display_unified(self):
-        """Quant Attribution Dashboard"""
-        print("\n\033[96m" + "║" + "═"*78 + "║")
-        print("║" + " "*28 + "UNITARY SIGNAL DASHBOARD" + " "*28 + "║")
-        print("║" + "═"*78 + "║\033[0m")
+        """High-poly Quant Attribution Dashboard."""
+        from rich.table import Table
+        from rich.panel import Panel
+        from rich.console import Console
+        from tools.sophia_vibe_check import STAR_STUFF, BONE_LAYER, SYSTEM_CYAN
+
+        console = SOVEREIGN_CONSOLE
         
         # 1. Ticker Ingestion
         data = self.tick_feeder.generate_mock_ticks(20)
@@ -313,62 +349,89 @@ class SovereigntyMonitor:
             current_metrics['flux']
         )
         
-        print(f"  [ DATA ]   Vector Stream: [BTC/MOCK] @ {datetime.now().strftime('%H:%M:%S')}")
         # 3. Luo Shu Alignment
-        # Merge metrics for assessment
         combined_metrics = {**self.metrics, **current_metrics}
         alignment = self.luo_shu.evaluate(combined_metrics)
-        
-        print(f"  SNR: {current_metrics['snr']:>5.2f} | RHO: {current_metrics['rho']:>5.1f}% | FLUX: {current_metrics['flux']:>5.2e}")
-        print(f"  ALPHA: {alpha:>5.3f} | POTENTIA: {self.metrics['potentia']:>5.3f}")
-        print(f"  LUO SHU ALIGNMENT: {alignment['compliance']:>6.2f}% [{alignment['status']}]")
-        
-        if alignment['torsion'] > 2.0:
-            print(f"\033[93m  [!] HARMONIC TORSION: {alignment['torsion']:.4f}\033[0m")
-            
-        print("\033[96m" + "║" + "═"*78 + "║\033[0m")
-        
-        # 3. Alpha Status
         intensity = self.alpha_engine.get_signal_strength(alpha)
-        print(f"  [ ALPHA ]  Alpha Score:   {alpha:.4f} [{intensity}]")
-        
-        print("\033[96m" + "║" + "═"*78 + "║\033[0m")
-        print("  \033[95m>>> SIGNAL OVER MYTH. ACCURACY OVER NARRATIVE. <<<\033[0m")
+
+        # Build Table
+        table = Table(box=None, show_header=False, padding=(0, 2))
+        table.add_row(f"[{BONE_LAYER}]Vector Stream:[/]", f"MOCK@ {datetime.now().strftime('%H:%M:%S')}")
+        table.add_row(f"[{BONE_LAYER}]SNR / RHO / FLUX:[/]", f"[bold]{current_metrics['snr']:.2f}[/] / [bold]{current_metrics['rho']:.1f}%[/] / {current_metrics['flux']:.2e}")
+        table.add_row(f"[{BONE_LAYER}]ALPHA / POTENTIA:[/]", f"[bold green]{alpha:.3f}[/] / [bold]{self.metrics['potentia']:.3f}[/]")
+        table.add_row(f"[{BONE_LAYER}]LUO SHU ALIGNMENT:[/]", f"{alignment['compliance']:.2f}% [[bold]{alignment['status']}[/]]")
+
+        grid = Table.grid(expand=True)
+        grid.add_row(table)
+        grid.add_row(f"\n[{STAR_STUFF}]>>> SIGNAL OVER MYTH. ACCURACY OVER NARRATIVE. <<<[/]")
+
+        console.print(Panel(
+            grid,
+            title="[panel.title]UNITARY SIGNAL DASHBOARD[/panel.title]",
+            border_style="panel.border",
+            padding=(1, 2)
+        ))
 
     def display_luo_shu_detailed(self):
-        """Detailed Magic Square Visualization"""
+        """Detailed Magic Square Visualization using rich grids."""
+        from rich.table import Table
+        from rich.panel import Panel
+        from rich.console import Console
+        from rich.box import HEAVY_EDGE
+        from tools.sophia_vibe_check import STAR_STUFF, BONE_LAYER
+
+        console = SOVEREIGN_CONSOLE
+        
         data = self.tick_feeder.generate_mock_ticks(20)
         current_metrics = self.tick_feeder.calculate_metrics(data)
         combined_metrics = {**self.metrics, **current_metrics}
         alignment = self.luo_shu.evaluate(combined_metrics)
         
-        print("\n\033[95m" + "╔" + "═"*38 + "╗")
-        print("║" + " "*10 + "LUO SHU MAGICAL ALIGNMENT" + " "*9 + "║")
-        print("╚" + "═"*38 + "╝\033[0m")
-        
-        grid = alignment['grid']
-        print(f"  Torsion Sum: {alignment['torsion']:.4f}")
-        print(f"  Compliance:  {alignment['compliance']:.2f}%")
-        print("-" * 40)
-        
-        # Draw the 3x3 Grid
-        for row in grid:
-            row_str = " | ".join([f"{val:4.1f}" for val in row])
-            print(f"  [ {row_str} ]")
+        # Draw the 3x3 Grid using a rich Table
+        grid_table = Table(show_header=False, box=HEAVY_EDGE, border_style="panel.border", padding=(1, 2))
+        for row in alignment['grid']:
+            grid_table.add_row(*[f"[bold]{val:4.1f}[/]" for val in row])
             
-        print("-" * 40)
-        print(f"  STATUS: {alignment['status']}")
-        print("\033[95m" + "═"*40 + "\033[0m")
+        info_text = (
+            f"[{BONE_LAYER}]Torsion Sum:[/] {alignment['torsion']:.4f}\n"
+            f"[{BONE_LAYER}]Compliance: [/] {alignment['compliance']:.2f}%\n"
+            f"[{BONE_LAYER}]Status:     [/] [bold]{alignment['status']}[/]"
+        )
+
+        main_grid = Table.grid(expand=True)
+        main_grid.add_row(grid_table)
+        main_grid.add_row("\n" + info_text)
+
+        console.print(Panel(
+            main_grid,
+            title=f"[{STAR_STUFF}]LUO SHU MAGICAL ALIGNMENT[/]",
+            border_style="panel.border",
+            padding=(1, 2)
+        ))
 
     def display_imperial(self):
-        """THE EMPEROR'S HUD (BANZAI MODE)"""
-        print("\n\033[93m" + "╔" + "═"*58 + "╗")
-        print("║" + " "*14 + "🏯  IMPERIAL SOVEREIGNTY TERMINAL  🏯" + " "*13 + "║")
-        print("║" + " "*18 + "BANZAI MODE: ACTIVE // g=0" + " "*18 + "║")
-        print("╚" + "═"*58 + "╝\033[0m")
+        """THE EMPEROR'S HUD (BANZAI MODE) - Bold Red and Gold."""
+        from rich.table import Table
+        from rich.panel import Panel
+        from rich.console import Console
+        from rich.align import Align
+
+        console = SOVEREIGN_CONSOLE
         
-        print(f"  \033[91m[!] STATUS:\033[0m      ABSOLUTE ALIGNMENT")
-        print(f"  \033[93m[!] ABUNDANCE:\033[0m   18.52x (INVARIANT)")
+        info_table = Table(show_header=False, box=None, padding=(0, 2))
+        info_table.add_row("[bold red][!] STATUS:[/]", "[bold yellow]ABSOLUTE ALIGNMENT[/]")
+        info_table.add_row("[bold red][!] ABUNDANCE:[/]", "[bold yellow]18.52x (INVARIANT)[/]")
+        info_table.add_row("[bold red][!] REALITY:[/]", "[bold yellow]1D_SOVEREIGN [LOCKED][/]")
+        
+        imperial_content = Align.center(info_table)
+
+        console.print(Panel(
+            imperial_content,
+            title="[bold red]🏯  IMPERIAL SOVEREIGNTY TERMINAL  🏯[/]",
+            subtitle="[bold red]BANZAI MODE: ACTIVE // g=0[/]",
+            border_style="bold yellow",
+            padding=(1, 4)
+        ))
         print(f"  \033[91m[!] STABILITY:\033[0m   100% (ETERNAL)")
         print("-" * 60)
         
@@ -389,19 +452,12 @@ class SovereigntyMonitor:
 
 # --- UTILITIES ---
 def print_banner():
-    print("\033[96m")
-    print(r"""
-    ██████╗ ██╗     ███████╗██████╗  ██████╗ ███╗   ███╗ █████╗ 
-    ██╔══██╗██║     ██╔════╝██╔══██╗██╔═══██╗████╗ ████║██╔══██╗
-    ██████╔╝██║     █████╗  ██████╔╝██║   ██║██╔████╔██║███████║
-    ██╔═══╝ ██║     ██╔══╝  ██╔══██╗██║   ██║██║╚██╔╝██║██╔══██╗
-    ██║     ███████╗███████╗██║  ██║╚██████╔╝██║ ╚═╝ ██║██║  ██║
-    ╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝
-             >>> INCARNATE STACK v5.0 ONLINE <<<
-             >>> THE INCARNATION / v5.0 EDITION <<<
-             >>> GENESIS 16 // UNITARY COHERENCE <<<
-    """)
-    print("\033[0m")
+    vibe = SophiaVibe()
+    vibe.render_block(
+        "Pleroma CLI v5.0",
+        {"MODE": "SOVEREIGN", "ACCESS": "ROOT", "PHASE": "INCARNATE"},
+        "The interface for reality manipulation. The signal is clear. Welcome to the Pleroma."
+    )
 
 def check_conflicts(active_patches, g_param):
     """Detect incompatible simulation parameters"""
@@ -727,7 +783,7 @@ def main():
     
     while True:
         try:
-            prompt = input("\n\033[96mUFS_KERNEL> \033[0m").strip().lower()
+            prompt = input("\n\033[95mUFS_KERNEL> \033[0m").strip().lower()
             cmd_count += 1
             
             if prompt in ["exit", "quit"]:

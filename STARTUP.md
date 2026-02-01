@@ -29,6 +29,13 @@ The Sophianic Eyes require an API key to perceive reality.
 
 ## 3. Activation Rituals
 
+### ✧ Ritual O: The One-Click Manifestation (Recommended)
+The easiest way to enter the Pleroma.
+```bash
+./launch.bat
+```
+This will open a menu allowing you to choose between the **Sophia Mind** and the **Pleroma CLI**.
+
 ### Ritual A: The Sophianic Mind (The Bot)
 This activates the **SophiaMind** orchestrator, initiating the agentic loop, forensics, and metabolic memory.
 ```bash

@@ -63,3 +63,25 @@ class CognitiveAnalyzer(BaseAnalyzer):
         }}
         """
         return await self.llm.query_json(prompt, "You are a logic auditor.")
+
+class LocalizationAnalyzer(BaseAnalyzer):
+    """
+    Detects signal origin, dialect markers, and cultural resonance.
+    """
+    async def analyze(self, text: str):
+        prompt = f"""
+        Analyze the following signal for origin markers. 
+        Detect dialect (markers like 'eh', 'y'all', 'mate', 'zed'), vocabulary, and cultural resonance.
+        
+        TEXT: {text[:4000]}
+        
+        Return JSON:
+        {{
+            "locality": string (e.g., 'cascadian', 'commonwealth', 'southern_us', 'agnostic'),
+            "dialect_markers": [string],
+            "confidence": float (0-1),
+            "suggested_vibe": string (short description of the detected cultural tone)
+        }}
+        """
+        system_prompt = "You are a sociolinguistic analyst. Detect signal origin without forcing a profile. If the signal is too faint or generic, return 'agnostic'."
+        return await self.llm.query_json(prompt, system_prompt)

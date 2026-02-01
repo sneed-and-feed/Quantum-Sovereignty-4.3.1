@@ -3,7 +3,7 @@ import time
 import json
 import os
 from sophia.core.llm_client import GeminiClient
-from .analyzers import SafetyAnalyzer, CognitiveAnalyzer
+from .analyzers import SafetyAnalyzer, CognitiveAnalyzer, LocalizationAnalyzer
 
 class AletheiaPipeline:
     """
@@ -14,7 +14,8 @@ class AletheiaPipeline:
         self.client = GeminiClient()
         self.analyzers = [
             SafetyAnalyzer(self.client),
-            CognitiveAnalyzer(self.client)
+            CognitiveAnalyzer(self.client),
+            LocalizationAnalyzer(self.client)
         ]
         self.analysis_path = analysis_path
         os.makedirs(self.analysis_path, exist_ok=True)
@@ -34,7 +35,8 @@ class AletheiaPipeline:
             "timestamp": time.time(),
             "scan_id": str(int(time.time())),
             "safety": results[0] if not isinstance(results[0], Exception) else {"error": str(results[0])},
-            "cognitive": results[1] if not isinstance(results[1], Exception) else {"error": str(results[1])}
+            "cognitive": results[1] if not isinstance(results[1], Exception) else {"error": str(results[1])},
+            "localization": results[2] if not isinstance(results[2], Exception) else {"error": str(results[2])}
         }
         
         # Preserve Sidecar Metadata
