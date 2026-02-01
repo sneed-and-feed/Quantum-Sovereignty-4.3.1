@@ -14,28 +14,10 @@ class CatLogicFilter:
         """
         # 1. The Gaze (Assessment)
         if safety_risk.lower() == "high":
-            prefix = "⚠️ [DECOHERENCE] The pattern frequency is disruptive. Aligning for protection."
+            prefix = "⚠️ [DECOHERENCE] Pattern disruptive. Aligning."
         elif safety_risk.lower() == "medium":
-            prefix = "👁️ [OBSERVATION] The pattern is erratic. Tuning for clarity."
+            prefix = "👁️ [OBSERVATION] Pattern erratic. Tuning."
         else:
-            prefix = "✨ [RESONANCE] The pattern is coherent. Expanding signal."
+            prefix = "✨ [RESONANCE] Pattern coherent. Expanding."
 
-        # 2. The Behavior (Non-Linearity)
-        mood = random.choice(self.moods)
-        
-        # 3. Glyphwave Localization (Optional Resonance)
-        footer_id = f"STATE: {mood}"
-        if glyphwave_engine:
-            # Map mood resonance to locality
-            locality = "agnostic"
-            if mood in ["Resonance", "Synthesis"]:
-                locality = "elven"
-            elif mood in ["Pattern-Match"]:
-                locality = "kitsune"
-            
-            # Generate a cleaner fragment for the footer
-            footer_resonance = glyphwave_engine.generate_holographic_fragment(footer_id, locality=locality)
-            return f"{prefix}\n\n{text}\n{footer_resonance}"
-        else:
-            footer_line = f"💠 [{footer_id}] :: [RESONANCE_ACTIVE]"
-            return f"{prefix}\n\n{text}\n\n---\n{footer_line}\n"
+        return f"{prefix}\n\n{text}"
