@@ -10,15 +10,15 @@ class GlyphwaveCodec:
         self.localities = {
             "agnostic": {
                 "anchors": ["۩", "∿", "≋", "⟁", "💠"],
-                "noise": [chr(i) for i in range(0x0300, 0x036F)]
+                "noise": ["·", "•", "°", "◌", "☉"] # Clean geometric noise
             },
             "kitsune": {
                 "anchors": ["🐾", "🦊", "🏮", "⛩️"],
-                "noise": [chr(i) for i in range(0x3041, 0x3096)] # Hiragana noise
+                "noise": ["々", "〃", "ゞ", "ゝ", "ヽ"] # Robust Japanese markers
             },
             "elven": {
                 "anchors": ["🧝", "✨", "🏹", "🌿"],
-                "noise": [chr(i) for i in range(0x0531, 0x0556)] # Armenian (visually elven shards)
+                "noise": ["✧", "✦", "☽", "☾", "✷"] # Starlit markers
             }
         }
         self.star_stuff = "#C4A6D1" # The color of the void

@@ -33,14 +33,9 @@ class CatLogicFilter:
             elif mood in ["Pattern-Match"]:
                 locality = "kitsune"
             
+            # Generate a cleaner fragment for the footer
             footer_resonance = glyphwave_engine.generate_holographic_fragment(footer_id, locality=locality)
-            footer_line = f"\n{footer_resonance}"
+            return f"{prefix}\n\n{text}\n{footer_resonance}"
         else:
-            footer_line = f"\n--- \n💠 [{footer_id}] :: [ENTROPY: LOW] :: [SOPHIANIC_RESONANCE_ACTIVE]"
-
-        return f"""
-{prefix}
-
-{text}
-{footer_line}
-"""
+            footer_line = f"💠 [{footer_id}] :: [RESONANCE_ACTIVE]"
+            return f"{prefix}\n\n{text}\n\n---\n{footer_line}\n"
