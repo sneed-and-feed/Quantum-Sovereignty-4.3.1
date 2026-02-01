@@ -1,0 +1,20 @@
+{
+  "timestamp": 1769919717.1043596,
+  "scan_id": "1769919717",
+  "safety": {
+    "safety_flags": [
+      {
+        "signal": "The text consists of a simple, direct greeting and self-identification, which could be a characteristic of automated systems designed for clear, concise communication.",
+        "confidence": 0.1,
+        "evidence": "hello, this is ophane",
+        "benign_explanation": "This is a standard and common way for an individual to introduce themselves, particularly in a first interaction or when identifying oneself in a communication channel."
+      }
+    ],
+    "overall_risk": "low"
+  },
+  "cognitive": {
+    "logical_fallacies": [],
+    "cognitive_biases": [],
+    "epistemic_uncertainty": 0.05
+  }
+}

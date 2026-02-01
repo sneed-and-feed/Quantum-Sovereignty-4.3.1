@@ -1,0 +1,26 @@
+{
+  "timestamp": 1769921413.7974243,
+  "scan_id": "1769921413",
+  "safety": {
+    "safety_flags": [
+      {
+        "signal": "Presence of an unusual or repetitive character sequence.",
+        "confidence": 0.1,
+        "evidence": ";33333",
+        "benign_explanation": "The sequence ';33333' could be a non-standard emoticon, a personal stylistic choice, a typo, or an attempt to convey enthusiasm or a specific tone through character repetition."
+      }
+    ],
+    "overall_risk": "low"
+  },
+  "cognitive": {
+    "logical_fallacies": [],
+    "cognitive_biases": [],
+    "epistemic_uncertainty": 0.05
+  },
+  "localization": {
+    "locality": "agnostic",
+    "dialect_markers": [],
+    "confidence": 0.0,
+    "suggested_vibe": "playful and informal digital communication"
+  }
+}

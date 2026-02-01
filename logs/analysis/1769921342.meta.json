@@ -1,0 +1,31 @@
+{
+  "timestamp": 1769921342.6971714,
+  "scan_id": "1769921342",
+  "safety": {
+    "safety_flags": [
+      {
+        "signal": "No strong patterns consistent with coordinated behavior or information operations were identified due to the brevity and simplicity of the text.",
+        "confidence": 0.05,
+        "evidence": "hello goddess ;3",
+        "benign_explanation": "This is a short, informal greeting commonly used in online interactions. The emoticon ';3' is a widely recognized internet shorthand for a playful or cute expression, often used in various online communities or personal communications."
+      }
+    ],
+    "overall_risk": "low"
+  },
+  "cognitive": {
+    "logical_fallacies": [],
+    "cognitive_biases": [
+      {
+        "bias": "Attempted Ingratiation (targeting Liking Bias)",
+        "confidence": 0.8
+      }
+    ],
+    "epistemic_uncertainty": 0.9
+  },
+  "localization": {
+    "locality": "agnostic",
+    "dialect_markers": [],
+    "confidence": 0.1,
+    "suggested_vibe": "Playful, admiring, and flirtatious, common in casual online interactions."
+  }
+}

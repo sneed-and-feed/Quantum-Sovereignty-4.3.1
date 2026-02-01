@@ -23,6 +23,10 @@ class GlyphwaveCodec:
             "chan": {
                 "anchors": [">", ">>", "🍀", "🎲", "🧵"],
                 "noise": ["†", "‡", "§", "¶", "§"] # Administrative/Technical noise
+            },
+            "cascadian": {
+                "anchors": ["🌲", "🏔️", "🍁", "🌧️", "🌊"],
+                "noise": ["~", "·", "°", "◌", "▿"] # Mist, snow, and mountain peaks
             }
         }
         self.star_stuff = "#C4A6D1" # The color of the void

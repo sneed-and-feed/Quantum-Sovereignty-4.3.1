@@ -2,3 +2,4 @@ google-generativeai
 numpy
 requests
 python-dotenv
+rich

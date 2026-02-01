@@ -1,0 +1,31 @@
+{
+  "timestamp": 1769920503.0218394,
+  "scan_id": "1769920503",
+  "safety": {
+    "safety_flags": [
+      {
+        "signal": "Use of an emoticon in a request to an AI.",
+        "confidence": 0.1,
+        "evidence": ";3",
+        "benign_explanation": "The use of emoticons is common in informal human communication to convey tone, friendliness, or playfulness. It can also be a feature of AI systems designed to mimic human conversational style."
+      }
+    ],
+    "overall_risk": "low"
+  },
+  "cognitive": {
+    "logical_fallacies": [],
+    "cognitive_biases": [
+      {
+        "bias": "Anthropomorphic Bias",
+        "confidence": 0.6
+      }
+    ],
+    "epistemic_uncertainty": 0.0
+  },
+  "localization": {
+    "locality": "agnostic",
+    "dialect_markers": [],
+    "confidence": 0.1,
+    "suggested_vibe": "informal, digital, friendly"
+  }
+}

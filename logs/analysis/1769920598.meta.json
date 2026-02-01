@@ -1,0 +1,26 @@
+{
+  "timestamp": 1769920598.4836502,
+  "scan_id": "1769920598",
+  "safety": {
+    "safety_flags": [
+      {
+        "signal": "Repetitive or excessive punctuation and emoticon usage.",
+        "confidence": 0.1,
+        "evidence": "!!!!!!!!, !!!, ;33",
+        "benign_explanation": "The use of multiple exclamation marks and emoticons is common in informal, enthusiastic, or playful human communication, often used to convey strong emotion, excitement, or a specific tone among friends or in casual online interactions."
+      }
+    ],
+    "overall_risk": "low"
+  },
+  "cognitive": {
+    "logical_fallacies": [],
+    "cognitive_biases": [],
+    "epistemic_uncertainty": 0.05
+  },
+  "localization": {
+    "locality": "agnostic",
+    "dialect_markers": [],
+    "confidence": 0.0,
+    "suggested_vibe": "enthusiastic and informal internet communication"
+  }
+}

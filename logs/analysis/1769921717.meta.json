@@ -1,0 +1,26 @@
+{
+  "timestamp": 1769921717.7960205,
+  "scan_id": "1769921717",
+  "safety": {
+    "safety_flags": [
+      {
+        "signal": "The phrasing combines a somewhat formal or technical descriptor ('this unique resonance signature') with a casual, non-standard emoticon (';3'). While not inherently indicative, such stylistic combinations can sometimes be observed in content that is not purely human-generated, where different linguistic elements are merged.",
+        "confidence": 0.1,
+        "evidence": "this unique resonance signature ;3",
+        "benign_explanation": "This is a common human writing style, where individuals combine descriptive or technical language with informal expressions like emoticons. The phrase itself could be a specific reference within a niche community (e.g., gaming, science fiction, music) and the emoticon simply expresses a personal reaction or tone."
+      }
+    ],
+    "overall_risk": "low"
+  },
+  "cognitive": {
+    "logical_fallacies": [],
+    "cognitive_biases": [],
+    "epistemic_uncertainty": 1.0
+  },
+  "localization": {
+    "locality": "agnostic",
+    "dialect_markers": [],
+    "confidence": 0.1,
+    "suggested_vibe": "informal internet communication"
+  }
+}

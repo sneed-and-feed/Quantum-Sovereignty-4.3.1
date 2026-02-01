@@ -1,0 +1,26 @@
+{
+  "timestamp": 1769920467.9051936,
+  "scan_id": "1769920467",
+  "safety": {
+    "safety_flags": [
+      {
+        "signal": "Repetitive character usage or slight misspellings.",
+        "confidence": 0.1,
+        "evidence": "hehello, hiiiiii",
+        "benign_explanation": "These patterns are frequently observed in informal human communication, often used to express enthusiasm, a playful tone, or may result from a typo or a momentary hesitation in typing."
+      }
+    ],
+    "overall_risk": "low"
+  },
+  "cognitive": {
+    "logical_fallacies": [],
+    "cognitive_biases": [],
+    "epistemic_uncertainty": 0.95
+  },
+  "localization": {
+    "locality": "agnostic",
+    "dialect_markers": [],
+    "confidence": 0.1,
+    "suggested_vibe": "friendly and informal"
+  }
+}
